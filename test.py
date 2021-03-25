@@ -40,6 +40,21 @@ def style_transfer(vgg, decoder, content, style, alpha=1.0,
     return decoder(feat)
 
 
+def get_net(decoder_path, vgg_path):
+    device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
+    decoder = net.decoder
+    vgg = net.vgg
+
+    decoder.eval()
+    vgg.eval()
+
+    decoder.load_state_dict(torch.load(decoder_path))
+    vgg.load_state_dict(torch.load(vgg_path))
+    vgg = nn.Sequential(*list(vgg.children())[:31])
+
+    return {vgg: vgg.to(device), decoder: decoder.to(device)}
+
+
 parser = argparse.ArgumentParser()
 # Basic options
 parser.add_argument('--content', type=str,
