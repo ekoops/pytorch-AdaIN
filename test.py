@@ -52,7 +52,7 @@ def get_net(decoder_path, vgg_path):
     vgg.load_state_dict(torch.load(vgg_path))
     vgg = nn.Sequential(*list(vgg.children())[:31])
 
-    return {vgg: vgg.to(device), decoder: decoder.to(device)}
+    return {"vgg": vgg.to(device), "decoder": decoder.to(device)}
 
 
 def main():
